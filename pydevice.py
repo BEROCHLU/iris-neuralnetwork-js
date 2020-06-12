@@ -77,7 +77,7 @@ def printResult():
 
 def addBias(hsh: dict) -> dict:
     arrInput = hsh["input"]
-    arrInput.append(-1)  # add bias | arrInput.append(random.random() * -1)
+    arrInput.append(random.random()*-1)  # add bias | arrInput.append(random.random() * -1)
     return arrInput
 
 
