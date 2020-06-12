@@ -7,11 +7,12 @@ import time
 import random
 import datetime
 
-DESIRED_ERROR = 0.001
-THRESHOLD = 1000000
-OUT_NODE = 1
-ETA = 0.5
+DESIRED_ERROR = 0.001  # expected error
+THRESHOLD = 10000  # epoch threshold
+OUT_NODE = 1  # out node number
+ETA = 0.5  # learning coefficient
 
+AF = 1 # 0: sigmoid 1: ReLU
 
 def sigmoid(a: float) -> float:
     if a < 0:
@@ -39,7 +40,10 @@ def findHidOut(n: int):
         dot_h = 0
         for j in range(IN_NODE):
             dot_h += x[n][j] * v[i][j]
-        hid[i] = sigmoid(dot_h)
+        if AF == 0:
+            hid[i] = sigmoid(dot_h)
+        else:
+            hid[i] = max(0, dot_h)
 
     hid[HID_NODE - 1] = random.random()
 
@@ -73,13 +77,13 @@ def printResult():
 
 def addBias(hsh: dict) -> dict:
     arrInput = hsh["input"]
-    # arrInput.append(random.random() * -1)  # add bias
-    arrInput.append(-1)  # add bias
+    arrInput.append(-1)  # add bias | arrInput.append(random.random() * -1)
     return arrInput
 
 
 if __name__ == "__main__":
-    f = open("./json/cell30.json", "r")  # xor | cell30 | n225out
+    json_path = "./json/xor.json"  # xor | cell30 | benchmark
+    f = open(json_path, "r")
     arrHsh = json.load(f)
 
     x = list(map(addBias, arrHsh))
@@ -134,7 +138,10 @@ if __name__ == "__main__":
                 for k in range(OUT_NODE):
                     delta_hid[i] += delta_out[k] * w[k][i]
 
-                delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i]
+                if AF == 0:
+                    delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i]
+                else:
+                    delta_hid[i] = dmax(hid[i]) * delta_hid[i]
 
             for i in range(HID_NODE):
                 for j in range(IN_NODE):
