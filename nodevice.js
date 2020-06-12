@@ -6,7 +6,7 @@ const XLSX = require('xlsx');
 const DESIRED_ERROR = 0.001;
 const OUT_NODE = 1;
 const ETA = 0.5;
-const ACTIVE = 0;
+const ACTIVE = 0; // 0: sigmoid 1: ReLU
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
