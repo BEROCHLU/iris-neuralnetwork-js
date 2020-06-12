@@ -1,7 +1,7 @@
 'use strict';
 
+const fs = require('fs');
 const _ = require('lodash');
-const XLSX = require('xlsx');
 
 const DESIRED_ERROR = 0.001;
 const OUT_NODE = 1;
@@ -78,18 +78,18 @@ const printResult = () => {
  * Main
  */
 {
-    const workbook = XLSX.readFile('./cell-automaton30-nb.csv');
-    const worksheet = workbook.Sheets['Sheet1'];
-    const arrHashExcel = XLSX.utils.sheet_to_json(worksheet);
+    const strJson = fs.readFileSync('./json/xor.json', 'utf8');
+    const arrHsh = JSON.parse(strJson);
 
-    IN_NODE = _.keys(arrHashExcel[0]).length; //入力ノード数決定（バイアス含む）
-    HID_NODE = IN_NODE + 1; //隠れノード数決定
-
-    t = _.map(arrHashExcel, hashExcel => [hashExcel.t]);
-    x = _.map(arrHashExcel, hashExcel => {
-        const hashOmit = _.omit(hashExcel, 't');
-        return _.map(hashOmit); //[hashExcel.a0, hashExcel.a1, hashExcel.a2]
+    x = _.map(arrHsh, hsh => {
+        let arrBuf = hsh.input;
+        arrBuf.push(Math.random());
+        return arrBuf;
     });
+    t = _.map(arrHsh, hsh => hsh.output);
+
+    IN_NODE = _.keys(arrHsh[0].input).length; //入力ノード数決定（バイアス含む）
+    HID_NODE = IN_NODE + 1; //隠れノード数決定
 
     days = x.length;
 
