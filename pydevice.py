@@ -7,7 +7,7 @@ import time
 import random
 import datetime
 
-DESIRED_ERROR = 0.005
+DESIRED_ERROR = 0.001
 THRESHOLD = 1000000
 OUT_NODE = 1
 ETA = 0.5
@@ -51,30 +51,13 @@ def findHidOut(n: int):
 
 
 def printResult():
-    arrNet = []
-    s = 0
-    s_max = -256
-    s_min = 256
     for i in range(days):
         findHidOut(i)
         rd_teacher = round(t[i][0], 3)
         rd_out = round(out[0], 3)
-        net = 100 * (t[i][0] - out[0]) / t[i][0]
-        s += net
-        arrNet.append(net)
-        str_date = arrHsh[i]["date"]
-        print(f"{str_date} teacher: {rd_teacher} out: {rd_out} valance: {round(s, 3)}")
-
-        if s_max < s:
-            s_max = s
-        if s < s_min:
-            s_min = s
+        print(f"teacher: {rd_teacher} out: {rd_out}")
 
     rd_err = round(fError, 5)
-    s_max = round(s_max, 3)
-    s_min = round(s_min, 3)
-    s_mean = (s_max + s_min) / 2
-    s_mean = round(s_mean, 3)
     f_time = time_ed - time_st
 
     if 60 <= f_time:
@@ -84,8 +67,7 @@ def printResult():
         n_minute = 0
         f_sec = round(f_time, 2)
 
-    print(f"epoch: {epoch} final err: {rd_err} days: {days}")
-    print(f"max: {s_max} min: {s_min} mean: {s_mean}")
+    print(f"epoch: {epoch} final err: {rd_err} array: {days}")
     print(f"time: {n_minute} min {f_sec} sec.")
 
 
@@ -97,7 +79,7 @@ def addBias(hsh: dict) -> dict:
 
 
 if __name__ == "__main__":
-    f = open("./json/n225out.json", "r")  # xor | cell30 | py225 | n225out
+    f = open("./json/cell30.json", "r")  # xor | cell30 | n225out
     arrHsh = json.load(f)
 
     x = list(map(addBias, arrHsh))
