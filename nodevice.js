@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const _ = require('lodash');
 
 const DESIRED_ERROR = 0.001;
 const OUT_NODE = 1;
@@ -70,7 +69,7 @@ const printResult = () => {
     console.log();
     for (let i = 0; i < DATA_LEN; i++) {
         findHiddenOutput(i);
-        const fout = _.round(out[0], 2);
+        const fout = out[0].toFixed(2);
         console.log(`${t[i][0]}: ${fout}`);
     }
 }
@@ -81,12 +80,12 @@ const printResult = () => {
     const strJson = fs.readFileSync('./json/xor.json', 'utf8');
     const arrHsh = JSON.parse(strJson);
 
-    x = _.map(arrHsh, hsh => {
+    x = arrHsh.map(hsh => {
         let arrBuf = hsh.input;
         arrBuf.push(Math.random()); //add input bias
         return arrBuf;
     });
-    t = _.map(arrHsh, hsh => hsh.output);
+    t = arrHsh.map(hsh => hsh.output);
 
     IN_NODE = arrHsh[0].input.length; //入力ノード数決定（バイアス含む）
     HID_NODE = IN_NODE + 1; //隠れノード数決定
@@ -157,7 +156,7 @@ const printResult = () => {
 
         if (epoch % 100 === 0) {
             epoch = epoch + '';
-            console.log(`${epoch.padStart(5)}: ${_.round(fError, 6)}`);
+            console.log(`${epoch.padStart(5)}: ${fError.toFixed(6)}`);
         } else if (20000 < epoch) {
             break;
         }

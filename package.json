@@ -8,8 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "lodash": "^4.17.15"
-  }
+  "license": "MIT"
 }
