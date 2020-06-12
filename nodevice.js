@@ -2,13 +2,8 @@
 
 const _ = require('lodash');
 const XLSX = require('xlsx');
-const {
-    dot
-} = require('mathjs');
 
 const DESIRED_ERROR = 0.001;
-let IN_NODE;
-let HID_NODE;
 const OUT_NODE = 1;
 const ETA = 0.5;
 const ACTIVE = 0;
@@ -16,6 +11,9 @@ const ACTIVE = 0;
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
 const dfmax = x => (0 < x) ? 1 : 0;
+
+let IN_NODE;
+let HID_NODE;
 
 let hid = [];
 let out = [];
@@ -39,10 +37,15 @@ let w = []; //w[OUT_NODE][HID_NODE]
 const findHiddenOutput = (n) => {
 
     for (let i = 0; i < HID_NODE; i++) {
+        let neth = 0;
+        for (let j = 0; j < IN_NODE; j++) {
+            neth += x[n][j] * v[i][j];
+        }
+
         if (ACTIVE === 0) {
-            hid[i] = sigmoid(dot(x[n], v[i]));
+            hid[i] = sigmoid(neth);
         } else {
-            hid[i] = Math.max(0, dot(x[n], v[i]));
+            hid[i] = Math.max(0, neth);
         }
     }
 
@@ -53,7 +56,11 @@ const findHiddenOutput = (n) => {
     }
 
     for (let i = 0; i < OUT_NODE; i++) {
-        out[i] = sigmoid(dot(w[i], hid));
+        let neto = 0;
+        for (let j = 0; j < HID_NODE; j++) {
+            neto += w[i][j] * hid[j];
+        }
+        out[i] = sigmoid(neto);
     }
 }
 /**

@@ -2,16 +2,15 @@
   "name": "simple-based-neuralnetwork",
   "version": "1.0.0",
   "description": "",
-  "main": "cell.js",
+  "main": "nodevice.js",
   "scripts": {
-    "cell": "node cell.js"
+    "run": "node nodevice.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "lodash": "^4.17.15",
-    "mathjs": "^7.0.1",
     "xlsx": "^0.16.2"
   }
 }
