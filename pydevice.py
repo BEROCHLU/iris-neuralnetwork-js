@@ -8,7 +8,7 @@ import random
 import datetime
 
 DESIRED_ERROR = 0.001  # expected error
-THRESHOLD = 20000  # epoch threshold
+THRESHOLD = 10000  # epoch threshold
 OUT_NODE = 1  # out node number
 ETA = 0.5  # learning coefficient
 ACTIVE = 0  # 0: sigmoid 1: ReLU
@@ -87,7 +87,7 @@ def addBias(hsh: dict) -> dict:
 
 
 if __name__ == "__main__":
-    json_path = "./json/xor.json"  # xor | cell30 | benchmark
+    json_path = "./json/xor.json"  # xor | cell30
     f = open(json_path, "r")
     arrHsh = json.load(f)
 
