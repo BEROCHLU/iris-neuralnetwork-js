@@ -22,7 +22,7 @@ let delta_out = [];
 let delta_hid = [];
 
 let epoch = 0; //学習回数
-let days; //学習データ数
+let DATA_LEN; //学習データ数
 let fError = Number.MAX_SAFE_INTEGER;
 
 let x; //学習データ+バイアス
@@ -68,7 +68,7 @@ const findHiddenOutput = (n) => {
  */
 const printResult = () => {
     console.log();
-    for (let i = 0; i < days; i++) {
+    for (let i = 0; i < DATA_LEN; i++) {
         findHiddenOutput(i);
         const fout = _.round(out[0], 2);
         console.log(`${t[i][0]}: ${fout}`);
@@ -83,17 +83,14 @@ const printResult = () => {
 
     x = _.map(arrHsh, hsh => {
         let arrBuf = hsh.input;
-        arrBuf.push(Math.random());
+        arrBuf.push(Math.random()); //add input bias
         return arrBuf;
     });
     t = _.map(arrHsh, hsh => hsh.output);
 
-    IN_NODE = _.keys(arrHsh[0].input).length; //入力ノード数決定（バイアス含む）
+    IN_NODE = arrHsh[0].input.length; //入力ノード数決定（バイアス含む）
     HID_NODE = IN_NODE + 1; //隠れノード数決定
-
-    days = x.length;
-
-    _.forEach(x, arr => arr.push(Math.random())); //input配列最後のバイアス追加 | -1
+    DATA_LEN = x.length;
 
     for (let i = 0; i < HID_NODE; i++) {
         v.push([]);
@@ -121,7 +118,7 @@ const printResult = () => {
         epoch++;
         fError = 0;
 
-        for (let n = 0; n < days; n++) {
+        for (let n = 0; n < DATA_LEN; n++) {
             findHiddenOutput(n);
 
             for (let k = 0; k < OUT_NODE; k++) {
