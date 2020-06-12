@@ -8,7 +8,7 @@ import random
 import datetime
 
 DESIRED_ERROR = 0.001  # expected error
-THRESHOLD = 10000  # epoch threshold
+THRESHOLD = 20000  # epoch threshold
 OUT_NODE = 1  # out node number
 ETA = 0.5  # learning coefficient
 ACTIVE = 0  # 0: sigmoid 1: ReLU
@@ -47,7 +47,10 @@ def findHidOut(n: int):
         else:
             raise Exception("Activation function is 0 or 1")
 
-    hid[HID_NODE - 1] = -1  # random.random() | -1
+    if ACTIVE == 0:
+        hid[HID_NODE - 1] = random.random()
+    elif ACTIVE == 1:
+        hid[HID_NODE - 1] = -1
 
     for i in range(OUT_NODE):
         dot_o = 0
