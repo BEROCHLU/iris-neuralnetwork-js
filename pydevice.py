@@ -11,8 +11,8 @@ DESIRED_ERROR = 0.001  # expected error
 THRESHOLD = 10000  # epoch threshold
 OUT_NODE = 1  # out node number
 ETA = 0.5  # learning coefficient
+ACTIVE = 0  # 0: sigmoid 1: ReLU
 
-AF = 1 # 0: sigmoid 1: ReLU
 
 def sigmoid(a: float) -> float:
     if a < 0:
@@ -40,12 +40,14 @@ def findHidOut(n: int):
         dot_h = 0
         for j in range(IN_NODE):
             dot_h += x[n][j] * v[i][j]
-        if AF == 0:
+        if ACTIVE == 0:
             hid[i] = sigmoid(dot_h)
-        else:
+        elif ACTIVE == 1:
             hid[i] = max(0, dot_h)
+        else:
+            raise Exception("Activation function is 0 or 1")
 
-    hid[HID_NODE - 1] = random.random()
+    hid[HID_NODE - 1] = -1  # random.random() | -1
 
     for i in range(OUT_NODE):
         dot_o = 0
@@ -71,13 +73,13 @@ def printResult():
         n_minute = 0
         f_sec = round(f_time, 2)
 
-    print(f"epoch: {epoch} final err: {rd_err} array: {days}")
+    print(f"epoch: {epoch} final err: {rd_err}")
     print(f"time: {n_minute} min {f_sec} sec.")
 
 
 def addBias(hsh: dict) -> dict:
     arrInput = hsh["input"]
-    arrInput.append(random.random()*-1)  # add bias | arrInput.append(random.random() * -1)
+    arrInput.append(random.random())  # add bias | random.random() * -1
     return arrInput
 
 
@@ -138,15 +140,17 @@ if __name__ == "__main__":
                 for k in range(OUT_NODE):
                     delta_hid[i] += delta_out[k] * w[k][i]
 
-                if AF == 0:
+                if ACTIVE == 0:
                     delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i]
-                else:
+                elif ACTIVE == 1:
                     delta_hid[i] = dmax(hid[i]) * delta_hid[i]
 
             for i in range(HID_NODE):
                 for j in range(IN_NODE):
                     v[i][j] += ETA * delta_hid[i] * x[n][j]
-        # for days
+        # for in days
+        if epoch % 100 == 0:
+            print(f"epoch: {epoch} err: {round(fError, 5)}")
 
         if THRESHOLD <= epoch:
             print("force quit")

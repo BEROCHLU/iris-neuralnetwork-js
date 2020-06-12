@@ -2,16 +2,19 @@
 
 const _ = require('lodash');
 const XLSX = require('xlsx');
-const { dot } = require('mathjs');
+const {
+    dot
+} = require('mathjs');
 
 const DESIRED_ERROR = 0.001;
 let IN_NODE;
 let HID_NODE;
 const OUT_NODE = 1;
 const ETA = 0.5;
+const AF = 1;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
-const dsigmoid = x =>  x*(1-x);
+const dsigmoid = x => x * (1 - x);
 const dfmax = x => (0 < x) ? 1 : 0;
 
 let hid = [];
@@ -33,7 +36,7 @@ let w = []; //w[OUT_NODE][HID_NODE]
 const frandFix = () => {
     let fNum = _.random(32767) % 10000 / 10001; //_.random(32767) % 10000 / 10001
     //fNum += 0.5;
-    return fNum;
+    return Math.random();
 }
 /**
  * 隠れ層、出力層の計算
@@ -46,7 +49,11 @@ const findHiddenOutput = (n) => {
             neth += x[n][j] * v[i][j];
         }
         hid[i] = Math.max(0, neth); //ReLU*/
-        hid[i] = Math.max(0, dot(x[n], v[i]));
+        if (AF === 0){
+            hid[i] = sigmoid(dot(x[n], v[i]));
+        } else {
+            hid[i] = Math.max(0, dot(x[n], v[i]));
+        }
     }
 
     hid[HID_NODE - 1] = frandFix(); //配列最後にバイアス
@@ -80,18 +87,18 @@ const printResult = () => {
     const arrHashExcel = XLSX.utils.sheet_to_json(worksheet);
 
     IN_NODE = _.keys(arrHashExcel[0]).length; //入力ノード数決定（バイアス含む）
-    HID_NODE = IN_NODE + 1;//隠れノード数決定
+    HID_NODE = IN_NODE + 1; //隠れノード数決定
 
     t = _.map(arrHashExcel, hashExcel => [hashExcel.t]);
     //x = _.map(arrHashExcel, hashExcel => [hashExcel.a0, hashExcel.a1]);
     x = _.map(arrHashExcel, hashExcel => {
         const hashOmit = _.omit(hashExcel, 't');
-        return _.map(hashOmit);//[hashExcel.a0, hashExcel.a1, hashExcel.a2]
+        return _.map(hashOmit); //[hashExcel.a0, hashExcel.a1, hashExcel.a2]
     });
 
     days = x.length;
 
-    _.forEach(x, arr => arr.push(frandFix())); //配列最後のバイアス追加
+    _.forEach(x, arr => arr.push(frandFix())); //input配列最後のバイアス追加 | -1
 
     for (let i = 0; i < HID_NODE; i++) {
         v.push([]);
@@ -141,8 +148,11 @@ const printResult = () => {
                     delta_hid[i] += delta_out[k] * w[k][i]; //Σδw
                 }
 
-                delta_hid[i] = dfmax(hid[i]) * delta_hid[i]; //H(1-H)*Σδw
-                //delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i];
+                if (AF === 0) {
+                    delta_hid[i] = dfmax(hid[i]) * delta_hid[i]; //H(1-H)*Σδw
+                } else {
+                    delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i];
+                }
             }
 
             for (let i = 0; i < HID_NODE; i++) { // Δv
