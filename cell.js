@@ -11,7 +11,7 @@ let IN_NODE;
 let HID_NODE;
 const OUT_NODE = 1;
 const ETA = 0.5;
-const AF = 0;
+const ACTIVE = 0;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -33,25 +33,24 @@ let t; //教師信号
 let v = []; //v[HID_NODE][IN_NODE]
 let w = []; //w[OUT_NODE][HID_NODE]
 
-const frandFix = () => {
-    let fNum = _.random(32767) % 10000 / 10001; //_.random(32767) % 10000 / 10001
-    //fNum += 0.5;
-    return Math.random();
-}
 /**
  * 隠れ層、出力層の計算
  */
 const findHiddenOutput = (n) => {
 
     for (let i = 0; i < HID_NODE; i++) {
-        if (AF === 0){
+        if (ACTIVE === 0) {
             hid[i] = sigmoid(dot(x[n], v[i]));
         } else {
             hid[i] = Math.max(0, dot(x[n], v[i]));
         }
     }
 
-    hid[HID_NODE - 1] = frandFix(); //配列最後にバイアス
+    if (ACTIVE === 0) {
+        hid[HID_NODE - 1] = Math.random();
+    } else {
+        hid[HID_NODE - 1] = -1;
+    }
 
     for (let i = 0; i < OUT_NODE; i++) {
         out[i] = sigmoid(dot(w[i], hid));
@@ -72,7 +71,7 @@ const printResult = () => {
  * Main
  */
 {
-    const workbook = XLSX.readFile('cell-automaton30-nb.csv');
+    const workbook = XLSX.readFile('./cell-automaton30-nb.csv');
     const worksheet = workbook.Sheets['Sheet1'];
     const arrHashExcel = XLSX.utils.sheet_to_json(worksheet);
 
@@ -80,7 +79,6 @@ const printResult = () => {
     HID_NODE = IN_NODE + 1; //隠れノード数決定
 
     t = _.map(arrHashExcel, hashExcel => [hashExcel.t]);
-    //x = _.map(arrHashExcel, hashExcel => [hashExcel.a0, hashExcel.a1]);
     x = _.map(arrHashExcel, hashExcel => {
         const hashOmit = _.omit(hashExcel, 't');
         return _.map(hashOmit); //[hashExcel.a0, hashExcel.a1, hashExcel.a2]
@@ -88,7 +86,7 @@ const printResult = () => {
 
     days = x.length;
 
-    _.forEach(x, arr => arr.push(frandFix())); //input配列最後のバイアス追加 | -1
+    _.forEach(x, arr => arr.push(Math.random())); //input配列最後のバイアス追加 | -1
 
     for (let i = 0; i < HID_NODE; i++) {
         v.push([]);
@@ -101,14 +99,14 @@ const printResult = () => {
     /* 中間層の結合荷重を初期化 */
     for (let i = 0; i < HID_NODE; i++) {
         for (let j = 0; j < IN_NODE; j++) {
-            v[i].push(frandFix());
+            v[i].push(Math.random());
         }
     }
 
     /* 出力層の結合荷重の初期化 */
     for (let i = 0; i < OUT_NODE; i++) {
         for (let j = 0; j < HID_NODE; j++) {
-            w[i].push(frandFix());
+            w[i].push(Math.random());
         }
     }
 
@@ -138,10 +136,10 @@ const printResult = () => {
                     delta_hid[i] += delta_out[k] * w[k][i]; //Σδw
                 }
 
-                if (AF === 0) {
-                    delta_hid[i] = dfmax(hid[i]) * delta_hid[i]; //H(1-H)*Σδw
+                if (ACTIVE === 0) {
+                    delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i]; //H(1-H)*Σδw
                 } else {
-                    delta_hid[i] = dsigmoid(hid[i]) * delta_hid[i];
+                    delta_hid[i] = dfmax(hid[i]) * delta_hid[i];
                 }
             }
 
