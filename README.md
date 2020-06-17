@@ -7,17 +7,17 @@
 それぞれのファイルに追加モジュールなくすぐ実行できる。
 
 # C language  
-### build:
+### build
 `gcc -Wall -o "cdevice" "cdevice.c" -lm`
-### excute:
+### excute
 `./cdevice`
   
-# node.js
-### excute:
+# Node.js
+### excute
 `node nodevice.js`
 
-# python
-### excute:
+# Python
+### excute
 `python3 pydevice.py`
 
 # Validation
