@@ -4,11 +4,10 @@
 今日のニューラルネットワークでは損失関数に平均二乗誤差を使っているがここでは最小二乗法を使っている。
 
 3種類の言語があるがそれぞれに依存関係はなく独立している。
+それぞれのファイルは追加モジュールなし。
 
 # C language  
 cdevice.c  
-###  dependencies
-Nothing
 ### build
 gcc -Wall -o "cdevice" "cdevice.c" -lm
 ###  Excute
@@ -16,14 +15,10 @@ gcc -Wall -o "cdevice" "cdevice.c" -lm
   
 # node.js
 nodevice.js
-###  dependencies
-Nothing
 ### Excute
 node nodevice.js
 
 # python
 pydevice.py
-###  dependencies
-Nothing
 ### Excute
 python3 pydevice.py
