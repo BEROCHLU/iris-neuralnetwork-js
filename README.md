@@ -19,3 +19,11 @@
 # python
 ### excute
 `python3 pydevice.py`
+
+
+# Validation
+ニューラルネットワークの比較、検証にセルオートマトン30と90の真理値表を活用している。csvフォルダ及びjsonフォルダに格納されている。  
+C言語はcsvフォルダを参照し、node.js pyhtonはjsonフォルダを参照している。
+
+# Active Function
+活性化関数はシグモイド関数またはReLUを実装している。それぞれのファイルの変数値(0 or 1)で切り替え可能である。
