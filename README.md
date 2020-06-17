@@ -7,9 +7,9 @@
 それぞれのファイルに追加モジュールなくすぐ実行できる。
 
 # C language  
-### build
+* build
 `gcc -Wall -o "cdevice" "cdevice.c" -lm`
-### excute
+* excute
 `./cdevice`
   
 # node.js
