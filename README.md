@@ -7,8 +7,6 @@
 それぞれのファイルに追加モジュールなくすぐ実行できる。
 
 # C language  
-### input file path
-`./csv/***.csv`
 ### build
 `gcc -Wall -o "cdevice" "cdevice.c" -lm`
 ###  Excute
