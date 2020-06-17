@@ -7,7 +7,6 @@
 それぞれのファイルに追加モジュールなくすぐ実行できる。
 
 # C language  
-`cdevice.c`
 ### input file path
 `./csv/***.csv`
 ### build
@@ -16,11 +15,9 @@
 `./cdevice`
   
 # node.js
-nodevice.js
 ### Excute
 node nodevice.js
 
 # python
-pydevice.py
 ### Excute
 python3 pydevice.py
