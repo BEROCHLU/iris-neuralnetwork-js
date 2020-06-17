@@ -7,19 +7,18 @@
 それぞれのファイルに追加モジュールなくすぐ実行できる。
 
 # C language  
-* build  
+### build:
 `gcc -Wall -o "cdevice" "cdevice.c" -lm`
-* excute  
+### excute:
 `./cdevice`
   
 # node.js
-### excute
+### excute:
 `node nodevice.js`
 
 # python
-### excute
+### excute:
 `python3 pydevice.py`
-
 
 # Validation
 ニューラルネットワークの比較、検証にXORおよびセルオートマトン30と90の真理値表を活用している。csvフォルダ及びjsonフォルダに格納されている。  
