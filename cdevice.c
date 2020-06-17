@@ -37,7 +37,7 @@ int main()
     clock_t start, end;
     time_t timer;
 
-    if ((fp = fopen("cell-automaton30-ca.csv", "r")) == NULL) {
+    if ((fp = fopen("./csv/cell-automaton30-ca.csv", "r")) == NULL) {
         printf("The file doesn't exist!\n"); exit(1);
     }
 
