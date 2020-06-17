@@ -1,10 +1,8 @@
 # simple-based-neuralnetwork
-ニューラルネットワークとは本来もっと単純なものであったが今日では複雑化しすぎている。  
-このリポジトリでは古典的であるが、最も単純な回帰分析のニューラルネットワークをC言語、node.js、pythonの3つの言語で公開している。
-このニューラルネットワークでは損失関数に最小二乗法を使っている。
+Neural networks were originally much simpler, but today they have become too complex.
+This repository contains the classic but simplest regression analysis neural networks in the C language, It is available in three languages: node.js and python. This neural network uses the least-squares method for the loss function.
 
-3つのファイルに依存関係はなく独立している。
-それぞれのファイルに追加モジュールなくすぐ実行できる。
+The three files are independent of each other and can be executed immediately without additional modules.
 
 # C language  
 ### build
@@ -21,12 +19,12 @@
 `python3 pydevice.py`
 
 # Validation
-ニューラルネットワークの比較、検証にXORおよびセルオートマトン30と90の真理値表を活用している。csvフォルダ及びjsonフォルダに格納されている。  
-C言語はcsvフォルダを参照し、node.js pyhtonはjsonフォルダを参照している。
+XOR and cellular automaton 30 and 90 truth tables for comparison and verification of neural networks. The files are stored in the csv folder and json folder.  
+C language refers to the csv folder and node.js pyhton refers to the json folder.
 
 # Activation Function
-活性化関数はシグモイド関数またはReLUを実装している。それぞれのファイルの変数値(0 or 1)で切り替え可能である。
+The activation function implements a sigmoid function or ReLU. It is possible to switch between them by the variable value (0 or 1) of each file.
 
 ## ReLU
-ReLUはシグモイド関数に比べ最大で10倍高速であるが、ローカルミニマムに陥りやすく不安定である。セルオートマトン90では学習不可であった。
-ReLUとシグモイド関数は中間層の活性化関数及びバイアス、微分に違いがある。従ってこの3点をif文で切り分けている。
+ReLU is up to 10 times faster than the sigmoid function, but it is prone to local minimum. It is unstable. The cell automaton 90 was unlearnable.
+ReLU and sigmoid functions differ in the activation function and bias and derivative of the hidden layer. Therefore, these three points are separated by an if statement.
