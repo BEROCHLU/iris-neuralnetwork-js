@@ -3,9 +3,10 @@
 const fs = require('fs');
 
 const DESIRED_ERROR = 0.001;
+const THRESHOLD = 20000;
 const OUT_NODE = 1;
 const ETA = 0.5;
-const ACTIVE = 0; // 0: sigmoid 1: ReLU
+const ACTIVE = 0; // 0: sigmoid, 1: ReLU
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -77,7 +78,7 @@ const printResult = () => {
  * Main
  */
 {
-    const strJson = fs.readFileSync('./json/xor.json', 'utf8');
+    const strJson = fs.readFileSync('./json/xor.json', 'utf8'); //xor | cell30
     const arrHsh = JSON.parse(strJson);
 
     x = arrHsh.map(hsh => {
@@ -157,7 +158,8 @@ const printResult = () => {
         if (epoch % 100 === 0) {
             epoch = epoch + '';
             console.log(`${epoch.padStart(5)}: ${fError.toFixed(6)}`);
-        } else if (20000 < epoch) {
+        }
+        if (THRESHOLD < epoch) {
             break;
         }
     } //while
