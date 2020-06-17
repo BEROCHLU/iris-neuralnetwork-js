@@ -7,11 +7,13 @@
 それぞれのファイルに追加モジュールなくすぐ実行できる。
 
 # C language  
-cdevice.c  
+`cdevice.c`
+### input file path
+`./csv/***.csv`
 ### build
-gcc -Wall -o "cdevice" "cdevice.c" -lm
+`gcc -Wall -o "cdevice" "cdevice.c" -lm`
 ###  Excute
-./cdevice
+`./cdevice`
   
 # node.js
 nodevice.js
