@@ -5,24 +5,25 @@
 
 3種類の言語があるがそれぞれに依存関係はなく独立している。
 
-## C language
-cdevice.c
-### requirement
+# C language  
+cdevice.c  
+###  dependencies
 Nothing
 ### build
 gcc -Wall -o "cdevice" "cdevice.c" -lm
-# Excute
+###  Excute
 ./cdevice
-
-## node.js
+  
+# node.js
 nodevice.js
+###  dependencies
+Nothing
 ### Excute
 node nodevice.js
 
-### python
+# python
 pydevice.py
+###  dependencies
+Nothing
 ### Excute
 python3 pydevice.py
-
-
-## requirement
