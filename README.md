@@ -9,13 +9,13 @@
 # C language  
 ### build
 `gcc -Wall -o "cdevice" "cdevice.c" -lm`
-###  Excute
+### excute
 `./cdevice`
   
 # node.js
-### Excute
-node nodevice.js
+### excute
+`node nodevice.js`
 
 # python
-### Excute
-python3 pydevice.py
+### excute
+`python3 pydevice.py`
