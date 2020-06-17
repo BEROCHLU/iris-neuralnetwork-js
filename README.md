@@ -25,6 +25,9 @@ C language refers to the csv folder and node.js pyhton refers to the json folder
 # Activation Function
 The activation function implements a sigmoid function or ReLU. It is possible to switch between them by the variable value (0 or 1) of each file.
 
-## ReLU
+# ReLU
 ReLU is up to 10 times faster than the sigmoid function, but it is prone to local minimum. It is unstable. The cell automaton 90 was unlearnable.
 ReLU and sigmoid functions differ in the activation function and bias and derivative of the hidden layer. Therefore, these three points are separated by an if statement.
+
+# Training
+Training data and test data are same. If you want to separate them, you need to save weight (v, w).
