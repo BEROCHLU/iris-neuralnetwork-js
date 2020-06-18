@@ -21,7 +21,7 @@ void printResult(void);
 double frandFix(void); //fix same seed issue of random number
 
 int DATA_LEN;
-int ACTIVE_MODE; //0: sigmoid, 1:ReLU
+int ACTIVE_MODE = 0; //0: sigmoid, 1:ReLU
 char date[SIZE][16];
 double x[SIZE][IN_NODE], t[SIZE][OUT_NODE];
 double v[HID_NODE][IN_NODE], w[OUT_NODE][HID_NODE];
@@ -52,13 +52,11 @@ int main(int argc, char *argv[])
     srand((unsigned int)time(NULL));    //generate a seed based on the current time
     //argcの個数で切り分けることで引数あるなしの処理を分けられる
     if (1 < argc) {
-        if (strcmp(argv[1], "0")) {
+        if (strcmp(argv[1], "0") == 0) {
             ACTIVE_MODE = 0;
-        } else if(strcmp(argv[1], "1")) {
+        } else if(strcmp(argv[1], "1") == 0) {
             ACTIVE_MODE = 1;
         }
-    } else {
-        ACTIVE_MODE = 0;
     }
 
     for (i = 0; i < HID_NODE; i++)      // initialize input-hidden weight
