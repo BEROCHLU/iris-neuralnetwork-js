@@ -8,7 +8,10 @@ The three files are independent of each other and can be executed immediately wi
 ### build
 `gcc -Wall -o "cdevice" "cdevice.c" -lm`
 ### excute
-`cdevice`
+* sigmoid  
+`cdevice` or `cdevice 0`
+* ReLU  
+`cdevice 1`
   
 # Node.js
 ### excute
