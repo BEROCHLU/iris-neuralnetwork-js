@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
     fclose(fp);
     srand((unsigned int)time(NULL));    //generate a seed based on the current time
-    //argcの個数で切り分けることで引数あるなしの処理を分けられる
+    //Arguments are determined by whether argc is bigger than 1.
     if (1 < argc) {
         if (strcmp(argv[1], "0") == 0) {
             ACTIVE_MODE = 0;
