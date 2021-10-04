@@ -2,7 +2,7 @@
 Neural networks were originally much simpler, but today them have become too complex.
 This repository contains the classic but simplest regression analysis neural networks. It is available in three languages: C, Node.js and Python. This neural network uses the least-squares method for the loss function.
 
-The three files are independent of each other and can be executed immediately without additional modules.
+The three files are independent of each other and can be executed immediately.
 
 # C language  
 ### build
@@ -15,7 +15,7 @@ The three files are independent of each other and can be executed immediately wi
   
 # Node.js
 ### excute
-`node nodevice.js`
+`node main.js`
 
 # Python
 ### excute

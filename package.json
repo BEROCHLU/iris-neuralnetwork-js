@@ -1,12 +1,25 @@
 {
   "name": "simple-based-neuralnetwork",
   "version": "1.0.0",
-  "description": "",
+  "description": "Neural networks were originally much simpler, but today them have become too complex.\r This repository contains the classic but simplest regression analysis neural networks. It is available in three languages: C, Node.js and Python. This neural network uses the least-squares method for the loss function.",
   "main": "nodevice.js",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "mathjs": "6.6.5"
+  },
+  "devDependencies": {},
   "scripts": {
-    "run": "node nodevice.js"
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BEROCHLU/simple-based-neuralnetwork.git"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BEROCHLU/simple-based-neuralnetwork/issues"
+  },
+  "homepage": "https://github.com/BEROCHLU/simple-based-neuralnetwork#readme"
 }
