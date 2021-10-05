@@ -50,13 +50,35 @@ const calculateNode = (n) => {
     }
 }
 /**
+ * 
+ * @param {Array}
+ * @returns {Array}
+ */
+const outputNode = (arrInput) => {
+    let arrHid = [];
+    let arrOut = [];
+
+    for (let i = 0; i < HID_NODE; i++) {
+        arrHid[i] = sigmoid(math.dot(arrInput, v[i]));
+    }
+
+    arrHid[HID_NODE - 1] = frandBias(); //配列最後にバイアス
+
+    for (let i = 0; i < OUT_NODE; i++) {
+        arrOut[i] = sigmoid(math.dot(w[i], arrHid));
+    }
+
+    return arrOut;
+}
+/**
  * 結果表示
  */
 const printResult = () => {
     console.log();
     for (let i = 0; i < DATA_LEN; i++) {
-        calculateNode(i);
-        const fout = out[0].toFixed(2);
+        //calculateNode(i);
+        const ret = outputNode(x[i]);
+        const fout = ret[0].toFixed(2);
         console.log(`${t[i][0]}: ${fout}`);
     }
 }
@@ -64,7 +86,7 @@ const printResult = () => {
  * Main
  */
 {
-    const strJson = fs.readFileSync('./json/xor.json', 'utf8'); //xor | cell30
+    const strJson = fs.readFileSync('./json/cell30.json', 'utf8'); //xor | cell30
     const arrHsh = JSON.parse(strJson);
 
     x = _.map(arrHsh, hsh => {
