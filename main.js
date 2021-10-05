@@ -15,19 +15,18 @@ const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
 const dfmax = x => (0 < x) ? 1 : 0;
 
+
+let epoch; //学習回数
+let DATA_LEN; //学習データ数
+let fError;
+
 let hid = [];
 let out = [];
-
 let delta_out = [];
 let delta_hid = [];
 
 let x; //学習データ+バイアス
 let t; //教師信号
-
-let epoch; //学習回数
-let DATA_LEN; //学習データ数
-let fError = Number.MAX_SAFE_INTEGER;
-
 let v = []; //v[HID_NODE][IN_NODE]
 let w = []; //w[OUT_NODE][HID_NODE]
 
@@ -65,7 +64,7 @@ const printResult = () => {
  * Main
  */
 {
-    const strJson = fs.readFileSync('./json/cell30.json', 'utf8'); //xor | cell30
+    const strJson = fs.readFileSync('./json/xor.json', 'utf8'); //xor | cell30
     const arrHsh = JSON.parse(strJson);
 
     x = _.map(arrHsh, hsh => {
@@ -87,14 +86,12 @@ const printResult = () => {
         w.push([]);
     }
 
-    /* 中間層の結合荷重を初期化 */
     for (let i = 0; i < HID_NODE; i++) {
         for (let j = 0; j < IN_NODE; j++) {
             v[i].push(frandWeight());
         }
     }
 
-    /* 出力層の結合荷重の初期化 */
     for (let i = 0; i < OUT_NODE; i++) {
         for (let j = 0; j < HID_NODE; j++) {
             w[i].push(frandWeight());
@@ -139,8 +136,8 @@ const printResult = () => {
         }
 
         if (epoch % 1000 === 0) {
-            epoch = epoch + '';
-            console.log(`${epoch.padStart(5)}: ${fError.toFixed(6)}`);
+            const s = epoch + '';
+            console.log(`${s.padStart(5)}: ${fError.toFixed(6)}`);
         }
     } //for
     printResult();
