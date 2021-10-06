@@ -1,36 +1,23 @@
-# simple-based-neuralnetwork
-Neural networks were originally much simpler, but today them have become too complex.
-This repository contains the classic but simplest regression analysis neural networks. It is available in three languages: C, Node.js and Python. This neural network uses the least-squares method for the loss function.
+# iris-neuralnetwork-js
+Node.jsで構築したニューラルネットワークでアヤメの分類問題に挑戦
 
-The three files are independent of each other and can be executed immediately.
+# dependency
+* lodash
+* mathjs@6.6.5
 
-# C language  
-### build
-`gcc -Wall -o "cdevice" "cdevice.c" -lm`
-### excute
-* sigmoid  
-`cdevice` or `cdevice 0`
-* ReLU  
-`cdevice 1`
-  
-# Node.js
-### excute
+# excute
 `node main.js`
 
-# Python
-### excute
-`python3 pydevice.py`
-
-# Validation
-XOR and cellular automaton 30 and 90 truth tables for comparison and verification of neural networks. The files are stored in the csv folder and json folder.  
-C language refers to the csv folder and node.js pyhton refers to the json folder.
-
-# Activation Function
-The activation function implements a sigmoid function or ReLU. It is possible to switch between them by the variable value (0 or 1) of each file.
-
-# ReLU
-ReLU is up to 10 times faster than the sigmoid function, but it is prone to local minimum. It is unstable. The cell automaton 90 was unlearnable.
-ReLU and sigmoid functions differ in the activation function and bias and derivative of the hidden layer. Therefore, these three points are separated by an if statement.
-
-# Training
-Training data and test data are same. If you want to separate them, you need to save weight (v, w).
+# Traning
+学習回数: 2000
+学習係数: 0.5
+活性化関数: シグモイド関数
+訓練データ: 100  
+テストデータ: 50  
+シャッフル: あり  
+入力ノード: 4  
+中間ノード: 5  
+出力ノード: 3  
+重み: v(入力<->中間), w(中間<->出力)  
+重みの初期値: 0 <= v,w < 1  
+バイアス: -1  
