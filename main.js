@@ -6,10 +6,10 @@ const math = require('mathjs');
 
 let IN_NODE;
 let HID_NODE;
-let OUT_NODE = 1;
+let OUT_NODE;
 
 const ETA = 0.5;
-const THRESHOLD = 100000;
+const THRESHOLD = 2000;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -19,7 +19,7 @@ const dfmax = x => (0 < x) ? 1 : 0;
 let epoch; //学習回数
 let DATA_LEN; //学習データ数
 let TEST_LEN;
-let fError;
+let arrDiff = [];
 
 let hid = [];
 let out = [];
@@ -74,15 +74,22 @@ const outputNode = (arrInput) => {
     return arrOut;
 }
 /**
+ * lamba
+ * @param {*} n 
+ * @returns 
+ */
+function roundfix(n) {
+    return n.toFixed(2);
+}
+/**
  * 結果表示
  */
 const printResult = () => {
     console.log();
     for (let i = 0; i < TEST_LEN; i++) {
-        //calculateNode(i);
-        const ret = outputNode(x2[i]);
-        const fout = ret[0].toFixed(2);
-        console.log(`${t2[i][0]}: ${fout}`);
+        const _arr = outputNode(x2[i]);
+        const ret = _.map(_arr, roundfix);
+        console.log(ret, t2[i]);
     }
 }
 /**
@@ -90,10 +97,12 @@ const printResult = () => {
  */
 {
     const strJson = fs.readFileSync('./json/iris-train.json', 'utf8'); //xor | cell30
-    const arrHsh = JSON.parse(strJson);
+    let arrHsh = JSON.parse(strJson);
+    arrHsh = _.shuffle(arrHsh);
 
     const strJson2 = fs.readFileSync('./json/iris-test.json', 'utf8');
-    const arrHsh2 = JSON.parse(strJson2);
+    let arrHsh2 = JSON.parse(strJson2);
+    arrHsh2 = _.shuffle(arrHsh2);
 
     x = _.map(arrHsh, hsh => {
         let arrBuf = hsh.input;
@@ -111,6 +120,8 @@ const printResult = () => {
 
     IN_NODE = arrHsh[0].input.length; //入力ノード数決定（バイアス含む）
     HID_NODE = IN_NODE + 1; //隠れノード数決定
+    OUT_NODE = arrHsh[0].output.length; //出力ノード数決定
+
     DATA_LEN = x.length;
     TEST_LEN = x2.length;
 
@@ -135,13 +146,14 @@ const printResult = () => {
     }
 
     for (epoch = 0; epoch <= THRESHOLD; epoch++) {
-        fError = 0;
+        arrDiff = [];
 
         for (let n = 0; n < DATA_LEN; n++) {
             calculateNode(n);
 
             for (let k = 0; k < OUT_NODE; k++) {
-                fError += 0.5 * Math.pow((t[n][k] - out[k]), 2); //誤差を日数分加算する
+                //arrDiff[k] = Math.abs(t[n][k] - out[k]);//0.5 * Math.pow((t[n][k] - out[k]), 2);
+                //console.log(t[n][k], out[k]);
                 // Δw
                 delta_out[k] = (t[n][k] - out[k]) * out[k] * (1 - out[k]); //δ=(t-o)*f'(net); net=Σwo; δo/δnet=f'(net);
             }
@@ -171,9 +183,9 @@ const printResult = () => {
             epoch = epoch + 0; //debug
         }
 
-        if (epoch % 10000 === 0) {
+        if (epoch % 100 === 0) {
             const s = epoch + '';
-            console.log(`${s.padStart(5)}: ${fError.toFixed(6)}`);
+            console.log(`${s.padStart(5)}: ${arrDiff}`);
         }
     } //for
     printResult();

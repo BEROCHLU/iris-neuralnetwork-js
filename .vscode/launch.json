@@ -6,11 +6,11 @@
     "configurations": [{
             "type": "node",
             "request": "launch",
-            "name": "プログラムの起動",
+            "name": "nodejs",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\nodevice.js"
+            "program": "${fileBasename}"
         },
         {
             "name": "gcc.exe - アクティブ ファイルのビルドとデバッグ",
