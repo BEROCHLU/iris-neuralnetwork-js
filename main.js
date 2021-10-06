@@ -27,7 +27,7 @@ let delta_out = [];
 let delta_hid = [];
 
 let x; //学習データ+バイアス
-let t; //教師信号
+let t; //学習教師信号
 let v = []; //v[HID_NODE][IN_NODE]
 let w = []; //w[OUT_NODE][HID_NODE]
 let x2; //テストデータ+バイアス
