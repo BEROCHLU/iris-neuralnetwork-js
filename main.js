@@ -9,7 +9,7 @@ let HID_NODE;
 let OUT_NODE;
 
 const ETA = 0.5;
-const THRESHOLD = 2000;
+const THRESHOLD = 3000;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -185,7 +185,7 @@ const printResult = () => {
 
         if (epoch % 100 === 0) {
             const s = epoch + '';
-            console.log(`${s.padStart(5)}: ${arrDiff}`);
+            //console.log(`${s.padStart(5)}: ${arrDiff}`);
         }
     } //for
     printResult();
