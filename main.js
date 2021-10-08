@@ -9,12 +9,11 @@ let HID_NODE;
 let OUT_NODE;
 
 const ETA = 0.5;
-const THRESHOLD = 3000;
+const THRESHOLD = 5000;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
 const dfmax = x => (0 < x) ? 1 : 0;
-
 
 let epoch; //学習回数
 let DATA_LEN; //学習データ数
@@ -30,8 +29,8 @@ let x; //学習データ+バイアス
 let t; //学習教師信号
 let v = []; //v[HID_NODE][IN_NODE]
 let w = []; //w[OUT_NODE][HID_NODE]
-let x2; //テストデータ+バイアス
-let t2; //テスト教師信号
+let xtest; //テストデータ+バイアス
+let ttest; //テスト教師信号
 
 //乱数生成
 //const frandWeight = () => math.random(0.5, 1.0); // 0.5 <= x < 1.0
@@ -87,9 +86,9 @@ function roundfix(n) {
 const printResult = () => {
     console.log();
     for (let i = 0; i < TEST_LEN; i++) {
-        const _arr = outputNode(x2[i]);
-        const ret = _.map(_arr, roundfix);
-        console.log(ret, t2[i]);
+        const arrOut = outputNode(xtest[i]);
+        const ret = _.map(arrOut, roundfix);
+        console.log(ret, ttest[i], xtest[i]);
     }
 }
 /**
@@ -100,9 +99,9 @@ const printResult = () => {
     let arrHsh = JSON.parse(strJson);
     arrHsh = _.shuffle(arrHsh);
 
-    const strJson2 = fs.readFileSync('./json/iris-test.json', 'utf8');
-    let arrHsh2 = JSON.parse(strJson2);
-    arrHsh2 = _.shuffle(arrHsh2);
+    const strJsonTest = fs.readFileSync('./json/iris-test.json', 'utf8');
+    let arrHshTest = JSON.parse(strJsonTest);
+    //arrHshTest = _.shuffle(arrHshTest);
 
     x = _.map(arrHsh, hsh => {
         let arrBuf = hsh.input;
@@ -111,19 +110,19 @@ const printResult = () => {
     });
     t = _.map(arrHsh, hsh => hsh.output);
 
-    x2 = _.map(arrHsh2, hsh => {
+    xtest = _.map(arrHshTest, hsh => {
         let arrBuf = hsh.input;
         arrBuf.push(frandBias()); //add input bias
         return arrBuf;
     });
-    t2 = _.map(arrHsh2, hsh => hsh.output);
+    ttest = _.map(arrHshTest, hsh => hsh.output);
 
     IN_NODE = arrHsh[0].input.length; //入力ノード数決定（バイアス含む）
     HID_NODE = IN_NODE + 1; //隠れノード数決定
     OUT_NODE = arrHsh[0].output.length; //出力ノード数決定
 
     DATA_LEN = x.length;
-    TEST_LEN = x2.length;
+    TEST_LEN = xtest.length;
 
     for (let i = 0; i < HID_NODE; i++) {
         v.push([]);
