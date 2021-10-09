@@ -33,9 +33,9 @@ let xtest; //テストデータ+バイアス
 let ttest; //テスト教師信号
 
 //乱数生成
-//const frandWeight = () => math.random(0.5, 1.0); // 0.5 <= x < 1.0
-const frandWeight = () => Math.random(); //  0 <= x < 1.0, Math.random()
-const frandBias = () => -1;
+//const addWeight = () => math.random(0.5, 1.0); // 0.5 <= x < 1.0
+const addWeight = () => Math.random(); //  0 <= x < 1.0, Math.random()
+const addBias = () => -1;
 
 /**
  * 隠れ層、出力層の計算
@@ -45,7 +45,7 @@ const calculateNode = (n) => {
         hid[i] = sigmoid(math.dot(x[n], v[i]));
     }
 
-    hid[HID_NODE - 1] = frandBias(); //配列最後にバイアス
+    hid[HID_NODE - 1] = addBias(); //配列最後にバイアス
 
     for (let i = 0; i < OUT_NODE; i++) {
         out[i] = sigmoid(math.dot(w[i], hid));
@@ -64,7 +64,7 @@ const outputNode = (arrInput) => {
         arrHid[i] = sigmoid(math.dot(arrInput, v[i]));
     }
 
-    arrHid[HID_NODE - 1] = frandBias(); //配列最後にバイアス
+    arrHid[HID_NODE - 1] = addBias(); //配列最後にバイアス
 
     for (let i = 0; i < OUT_NODE; i++) {
         arrOut[i] = sigmoid(math.dot(w[i], arrHid));
@@ -104,20 +104,20 @@ const printResult = () => {
 
     x = _.map(arrHshTrain, hsh => {
         let arrBuf = hsh.input;
-        arrBuf.push(frandBias()); //add input bias
+        arrBuf.push(addBias()); //add input bias
         return arrBuf;
     });
     t = _.map(arrHshTrain, hsh => hsh.output);
 
     xtest = _.map(arrHshTest, hsh => {
         let arrBuf = hsh.input;
-        arrBuf.push(frandBias()); //add input bias
+        arrBuf.push(addBias()); //add input bias
         return arrBuf;
     });
     ttest = _.map(arrHshTest, hsh => hsh.output);
 
     IN_NODE = arrHshTrain[0].input.length; //入力ノード数決定（バイアス含む）
-    HID_NODE = IN_NODE + 1; //隠れノード数決定
+    HID_NODE = IN_NODE + 2; //隠れノード数（バイアス含む）
     OUT_NODE = arrHshTrain[0].output.length; //出力ノード数決定
 
     DATA_LEN = x.length;
@@ -133,13 +133,13 @@ const printResult = () => {
 
     for (let i = 0; i < HID_NODE; i++) {
         for (let j = 0; j < IN_NODE; j++) {
-            v[i].push(frandWeight());
+            v[i].push(addWeight());
         }
     }
 
     for (let i = 0; i < OUT_NODE; i++) {
         for (let j = 0; j < HID_NODE; j++) {
-            w[i].push(frandWeight());
+            w[i].push(addWeight());
         }
     }
 
