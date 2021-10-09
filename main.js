@@ -9,7 +9,7 @@ let HID_NODE;
 let OUT_NODE;
 
 const ETA = 0.5;
-const THRESHOLD = 5000;
+const THRESHOLD = 250;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -78,7 +78,7 @@ const outputNode = (arrInput) => {
  * @returns 
  */
 function roundfix(n) {
-    return n.toFixed(2);
+    return n.toFixed(1);
 }
 /**
  * 結果表示
@@ -96,19 +96,18 @@ const printResult = () => {
  */
 {
     const strJson = fs.readFileSync('./json/iris-train.json', 'utf8'); //xor | cell30
-    let arrHsh = JSON.parse(strJson);
-    arrHsh = _.shuffle(arrHsh);
+    let arrHshTrain = JSON.parse(strJson);
+    //arrHshTrain = _.shuffle(arrHshTrain);
 
     const strJsonTest = fs.readFileSync('./json/iris-test.json', 'utf8');
-    let arrHshTest = JSON.parse(strJsonTest);
-    //arrHshTest = _.shuffle(arrHshTest);
+    const arrHshTest = JSON.parse(strJsonTest);
 
-    x = _.map(arrHsh, hsh => {
+    x = _.map(arrHshTrain, hsh => {
         let arrBuf = hsh.input;
         arrBuf.push(frandBias()); //add input bias
         return arrBuf;
     });
-    t = _.map(arrHsh, hsh => hsh.output);
+    t = _.map(arrHshTrain, hsh => hsh.output);
 
     xtest = _.map(arrHshTest, hsh => {
         let arrBuf = hsh.input;
@@ -117,9 +116,9 @@ const printResult = () => {
     });
     ttest = _.map(arrHshTest, hsh => hsh.output);
 
-    IN_NODE = arrHsh[0].input.length; //入力ノード数決定（バイアス含む）
+    IN_NODE = arrHshTrain[0].input.length; //入力ノード数決定（バイアス含む）
     HID_NODE = IN_NODE + 1; //隠れノード数決定
-    OUT_NODE = arrHsh[0].output.length; //出力ノード数決定
+    OUT_NODE = arrHshTrain[0].output.length; //出力ノード数決定
 
     DATA_LEN = x.length;
     TEST_LEN = xtest.length;
@@ -151,7 +150,8 @@ const printResult = () => {
             calculateNode(n);
 
             for (let k = 0; k < OUT_NODE; k++) {
-                //arrDiff[k] = Math.abs(t[n][k] - out[k]);//0.5 * Math.pow((t[n][k] - out[k]), 2);
+                let diff = 0.5 * Math.pow((t[n][k] - out[k]), 2);
+                arrDiff[k] = _.round(diff, 6);
                 //console.log(t[n][k], out[k]);
                 // Δw
                 delta_out[k] = (t[n][k] - out[k]) * out[k] * (1 - out[k]); //δ=(t-o)*f'(net); net=Σwo; δo/δnet=f'(net);
@@ -182,9 +182,9 @@ const printResult = () => {
             epoch = epoch + 0; //debug
         }
 
-        if (epoch % 100 === 0) {
+        if (epoch % 10 === 0) {
             const s = epoch + '';
-            //console.log(`${s.padStart(5)}: ${arrDiff}`);
+            console.log(`${s.padStart(5)}: ${arrDiff}`);
         }
     } //for
     printResult();
