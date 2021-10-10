@@ -9,7 +9,7 @@ let HID_NODE;
 let OUT_NODE;
 
 const ETA = 0.5;
-const THRESHOLD = 250;
+const THRESHOLD = 700;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -78,6 +78,7 @@ const outputNode = (arrInput) => {
  * @returns 
  */
 function roundfix(n) {
+    return _.round(n, 0);
     return n.toFixed(1);
 }
 /**
@@ -88,7 +89,7 @@ const printResult = () => {
     for (let i = 0; i < TEST_LEN; i++) {
         const arrOut = outputNode(xtest[i]);
         const ret = _.map(arrOut, roundfix);
-        console.log(ret, ttest[i], xtest[i]);
+        console.log(ret, ttest[i], _.isEqual(ret, ttest[i]),xtest[i]);
     }
 }
 /**
@@ -97,7 +98,7 @@ const printResult = () => {
 {
     const strJson = fs.readFileSync('./json/iris-train.json', 'utf8'); //xor | cell30
     let arrHshTrain = JSON.parse(strJson);
-    //arrHshTrain = _.shuffle(arrHshTrain);
+    arrHshTrain = _.shuffle(arrHshTrain);
 
     const strJsonTest = fs.readFileSync('./json/iris-test.json', 'utf8');
     const arrHshTest = JSON.parse(strJsonTest);
@@ -117,7 +118,7 @@ const printResult = () => {
     ttest = _.map(arrHshTest, hsh => hsh.output);
 
     IN_NODE = arrHshTrain[0].input.length; //入力ノード数決定（バイアス含む）
-    HID_NODE = IN_NODE + 2; //隠れノード数（バイアス含む）
+    HID_NODE = IN_NODE + 1; //隠れノード数（バイアス含む）
     OUT_NODE = arrHshTrain[0].output.length; //出力ノード数決定
 
     DATA_LEN = x.length;
@@ -150,9 +151,8 @@ const printResult = () => {
             calculateNode(n);
 
             for (let k = 0; k < OUT_NODE; k++) {
-                let diff = 0.5 * Math.pow((t[n][k] - out[k]), 2);
+                let diff = Math.pow((out[k] - t[n][k]), 2);
                 arrDiff[k] = _.round(diff, 6);
-                //console.log(t[n][k], out[k]);
                 // Δw
                 delta_out[k] = (t[n][k] - out[k]) * out[k] * (1 - out[k]); //δ=(t-o)*f'(net); net=Σwo; δo/δnet=f'(net);
             }
@@ -184,7 +184,8 @@ const printResult = () => {
 
         if (epoch % 10 === 0) {
             const s = epoch + '';
-            console.log(`${s.padStart(5)}: ${arrDiff}`);
+            let mse = _.mean(arrDiff);
+            console.log(`${s.padStart(5)}: ${_.round(mse, 6)}, [${arrDiff}]`);
         }
     } //for
     printResult();
