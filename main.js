@@ -18,7 +18,7 @@ const dfmax = x => (0 < x) ? 1 : 0;
 let epoch; //学習回数
 let DATA_LEN; //学習データ数
 let TEST_LEN;
-let arrDiff = [];
+let arrMSE = [];
 
 let hid = [];
 let out = [];
@@ -145,14 +145,13 @@ const printResult = () => {
     }
 
     for (epoch = 0; epoch <= THRESHOLD; epoch++) {
-        arrDiff = [];
 
         for (let n = 0; n < DATA_LEN; n++) {
+            let arrDiff = [];
             calculateNode(n);
 
             for (let k = 0; k < OUT_NODE; k++) {
-                let diff = Math.pow((t[n][k] - out[k]), 2);
-                arrDiff[k] = _.round(diff, 6);
+                arrDiff[k] = Math.pow((t[n][k] - out[k]), 2);
                 // Δw
                 delta_out[k] = (t[n][k] - out[k]) * out[k] * (1 - out[k]); //δ=(t-o)*f'(net); net=Σwo; δo/δnet=f'(net);
             }
@@ -179,14 +178,15 @@ const printResult = () => {
                     v[i][j] += ETA * delta_hid[i] * x[n][j]; //Δu=ηH(1-H)XΣδw
                 }
             }
-            epoch = epoch + 0; //debug
-        }
-        const sumse = _.sum(arrDiff);
-        if (epoch % 10 === 0) {
+            arrMSE[n] = arrDiff;
+        } // for DATA_LEN
+        if (epoch % 10 === 0) { //logging
             const s = epoch + '';
-            console.log(`${s.padStart(5)}: ${_.round(sumse, 6)}, [${arrDiff}]`);
+            const MSE_BATCH = _.meanBy(arrMSE, arr => {
+                return _.mean(arr);
+            });
+            console.log(`${s.padStart(5)}: ${_.round(MSE_BATCH, 6)}`);
         }
-        if (sumse < 0.0001) break;
-    } //for
+    } //for epoch
     printResult();
 }
