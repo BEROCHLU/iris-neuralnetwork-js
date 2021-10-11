@@ -9,7 +9,7 @@ let HID_NODE;
 let OUT_NODE;
 
 const ETA = 0.5;
-const THRESHOLD = 700;
+const THRESHOLD = 1000;
 
 const sigmoid = x => 1 / (1 + Math.exp(-x));
 const dsigmoid = x => x * (1 - x);
@@ -52,7 +52,7 @@ const calculateNode = (n) => {
     }
 }
 /**
- * 
+ *
  * @param {Array}
  * @returns {Array}
  */
@@ -74,8 +74,8 @@ const outputNode = (arrInput) => {
 }
 /**
  * lamba
- * @param {*} n 
- * @returns 
+ * @param {*} n
+ * @returns
  */
 function roundfix(n) {
     return _.round(n, 0);
@@ -89,7 +89,7 @@ const printResult = () => {
     for (let i = 0; i < TEST_LEN; i++) {
         const arrOut = outputNode(xtest[i]);
         const ret = _.map(arrOut, roundfix);
-        console.log(ret, ttest[i], _.isEqual(ret, ttest[i]),xtest[i]);
+        console.log(ret, ttest[i], _.isEqual(ret, ttest[i]), xtest[i]);
     }
 }
 /**
@@ -98,7 +98,7 @@ const printResult = () => {
 {
     const strJson = fs.readFileSync('./json/iris-train.json', 'utf8'); //xor | cell30
     let arrHshTrain = JSON.parse(strJson);
-    arrHshTrain = _.shuffle(arrHshTrain);
+    //arrHshTrain = _.shuffle(arrHshTrain);
 
     const strJsonTest = fs.readFileSync('./json/iris-test.json', 'utf8');
     const arrHshTest = JSON.parse(strJsonTest);
@@ -151,7 +151,7 @@ const printResult = () => {
             calculateNode(n);
 
             for (let k = 0; k < OUT_NODE; k++) {
-                let diff = Math.pow((out[k] - t[n][k]), 2);
+                let diff = Math.pow((t[n][k] - out[k]), 2);
                 arrDiff[k] = _.round(diff, 6);
                 // Δw
                 delta_out[k] = (t[n][k] - out[k]) * out[k] * (1 - out[k]); //δ=(t-o)*f'(net); net=Σwo; δo/δnet=f'(net);
@@ -181,12 +181,12 @@ const printResult = () => {
             }
             epoch = epoch + 0; //debug
         }
-
+        const sumse = _.sum(arrDiff);
         if (epoch % 10 === 0) {
             const s = epoch + '';
-            let mse = _.mean(arrDiff);
-            console.log(`${s.padStart(5)}: ${_.round(mse, 6)}, [${arrDiff}]`);
+            console.log(`${s.padStart(5)}: ${_.round(sumse, 6)}, [${arrDiff}]`);
         }
+        if (sumse < 0.0001) break;
     } //for
     printResult();
 }
