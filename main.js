@@ -40,7 +40,7 @@ const addBias = () => -1;
 /**
  * 隠れ層、出力層の計算
  */
-const calculateNode = (n) => {
+function calculateNode(n) {
     for (let i = 0; i < HID_NODE; i++) {
         hid[i] = sigmoid(math.dot(x[n], v[i]));
     }
@@ -51,12 +51,15 @@ const calculateNode = (n) => {
         out[i] = sigmoid(math.dot(w[i], hid));
     }
 }
-/**
- *
- * @param {Array}
- * @returns {Array}
- */
-const outputNode = (arrInput) => {
+
+function mseArray(arrArr) {
+    const MSE_AVE = _.meanBy(arrArr, arr => {
+        return _.mean(arr);
+    });
+    return MSE_AVE;
+}
+
+function outputNode(arrInput) {
     let arrHid = [];
     let arrOut = [];
 
@@ -79,12 +82,11 @@ const outputNode = (arrInput) => {
  */
 function roundfix(n) {
     return _.round(n, 0);
-    return n.toFixed(1);
 }
 /**
  * 結果表示
  */
-const printResult = () => {
+function printResult() {
     console.log();
     for (let i = 0; i < TEST_LEN; i++) {
         const arrOut = outputNode(xtest[i]);
@@ -182,10 +184,7 @@ const printResult = () => {
         } // for DATA_LEN
         if (epoch % 10 === 0) { //logging
             const s = epoch + '';
-            const MSE_BATCH = _.meanBy(arrMSE, arr => {
-                return _.mean(arr);
-            });
-            console.log(`${s.padStart(5)}: ${_.round(MSE_BATCH, 6)}`);
+            console.log(`${s.padStart(5)}: ${_.round(mseArray(arrMSE), 6)}`);
         }
     } //for epoch
     printResult();
