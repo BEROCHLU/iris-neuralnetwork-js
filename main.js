@@ -11,10 +11,6 @@ let OUT_NODE;
 const ETA = 0.5;
 const THRESHOLD = 1000;
 
-const sigmoid = x => 1 / (1 + Math.exp(-x));
-const dsigmoid = x => x * (1 - x);
-const dfmax = x => (0 < x) ? 1 : 0;
-
 let epoch; //学習回数
 let DATA_LEN; //学習データ数
 let TEST_LEN;
@@ -32,11 +28,14 @@ let w = []; //w[OUT_NODE][HID_NODE]
 let xtest; //テストデータ+バイアス
 let ttest; //テスト教師信号
 
-//乱数生成
+//関数式マクロ
 //const addWeight = () => math.random(0.5, 1.0); // 0.5 <= x < 1.0
+const sigmoid = x => 1 / (1 + Math.exp(-x));
+const dsigmoid = x => x * (1 - x);
+const dfmax = x => (0 < x) ? 1 : 0;
 const addWeight = () => Math.random(); //  0 <= x < 1.0, Math.random()
 const addBias = () => -1;
-
+const roundMap = (n) => _.round(n, 0);
 /**
  * 隠れ層、出力層の計算
  */
@@ -76,21 +75,13 @@ function outputNode(arrInput) {
     return arrOut;
 }
 /**
- * lamba
- * @param {*} n
- * @returns
- */
-function roundfix(n) {
-    return _.round(n, 0);
-}
-/**
  * 結果表示
  */
 function printResult() {
     console.log();
     for (let i = 0; i < TEST_LEN; i++) {
         const arrOut = outputNode(xtest[i]);
-        const ret = _.map(arrOut, roundfix);
+        const ret = _.map(arrOut, roundMap);
         console.log(ret, ttest[i], _.isEqual(ret, ttest[i]), xtest[i]);
     }
 }
