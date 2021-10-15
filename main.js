@@ -82,18 +82,18 @@ function printResult() {
     for (let i = 0; i < TEST_LEN; i++) {
         const arrOut = outputNode(xtest[i]);
         const ret = _.map(arrOut, roundMap);
-        console.log(ret, ttest[i], _.isEqual(ret, ttest[i]), xtest[i]);
+        console.log(ret, ttest[i], _.isEqual(ret, ttest[i]));
     }
 }
 /**
  * Main
  */
 {
-    const strJson = fs.readFileSync('./json/iris-train.json', 'utf8'); //xor | cell30
+    const strJson = fs.readFileSync('./json/iris-std-train.json', 'utf8'); //xor | cell30 | iris-train.json
     let arrHshTrain = JSON.parse(strJson);
     //arrHshTrain = _.shuffle(arrHshTrain);
 
-    const strJsonTest = fs.readFileSync('./json/iris-test.json', 'utf8');
+    const strJsonTest = fs.readFileSync('./json/iris-std-test.json', 'utf8'); //iris-test.json
     const arrHshTest = JSON.parse(strJsonTest);
 
     x = _.map(arrHshTrain, hsh => {
